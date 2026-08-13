@@ -41,7 +41,7 @@ for (const prefix of (forbidden.prefixes ?? []) as string[]) {
 }
 
 const freeze = runFrozen();
-if (!freeze.freezeMatch || !freeze.allNamed || freeze.z4 || freeze.count !== 17) {
+if (!freeze.freezeMatch || !freeze.allNamed || freeze.z4 || freeze.count !== JSON.parse(readFileSync("src/brudo/implication-freeze.json", "utf8")).case_count) {
   throw new Error(`native freeze failed ${JSON.stringify(freeze)}`);
 }
 

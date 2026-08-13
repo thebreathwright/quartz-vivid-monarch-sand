@@ -5,13 +5,13 @@
     "src/brudo/ablation.ts"
   ],
   "files": {
-    "src/brudo/implication.ts": "5f475d876910fac599990626f239cc1b342cac0d2ed8e2bf3b7bfbee02fe5fe1",
-    "src/brudo/implication-cases.ts": "075db3ccfdbbdf6bdac4ba1552bb11aa56ee0f27e0c1eccf980e8f4006b1935b",
-    "src/brudo/implication-freeze.json": "49eee1e8a1a8632816d9ffba7e4efb138aaaab378301d9139a8162affe56c641",
+    "src/brudo/implication.ts": "e5fc7c9ceea5f5d360f001b8023577f946cdca7e16e238bf4c7986dd529bbf76",
+    "src/brudo/implication-cases.ts": "28be5acb9045959b5d99f3ef86f06787fe24f3f96634b9b80d7a6c583f8e8fd6",
+    "src/brudo/implication-freeze.json": "791ebc69e6c984b3d2708c6124bc237db5c6fea7df06ca8167291dc492397b52",
     "src/lib/brudo/admission.ts": "869967b940e3f94d4052b5e1e6b44351b88c9d60e39bf991bbce054a7f3ab3a3",
-    "src/lib/brudo/tome.lex": "cbf36391a33feb41a6c3a4a7053a3a441b8f0ca68a5183dc7fc35516e00c8e2c",
+    "src/lib/brudo/tome.lex": "d44ff9389243fc2901d97496f00a8204f75797b5c04e6c824556f9bb8fa545e7",
     "src/lib/canon/safety-boundary.json": "a81d91bea0a376bf9557df7566e4e75584e025c639e7b5a98ec1767dfa10bc66",
     "src/lib/canon/boundary-h.json": "ea5845fd71150d7025072560d804d9c522c191e270f22a5a245559598b6e8401",
-    "src/brudo/implication-cases.json": "0c5fe1deb7c1bc659aa917237f492134c68f57a6c59a18acee3aa621ddd3e537"
+    "src/brudo/implication-cases.json": "a44ae15006e0d2f18027a8accc304aa96df541caf4726ea6675230662a035b46"
   }
 }

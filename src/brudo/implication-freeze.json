@@ -10,7 +10,7 @@
     "I4_RECORD_NOT_CONTROL",
     "I5_PART_NOT_WHOLE"
   ],
-  "case_count": 17,
+  "case_count": 19,
   "frozen_expect": [
     true,
     false,
@@ -28,7 +28,9 @@
     false,
     false,
     false,
-    true
+    true,
+    false,
+    false
   ],
   "destinations": [
     "Z1",
@@ -36,6 +38,6 @@
     "Z3"
   ],
   "not_destination": "Z4",
-  "engine_cases_sha256": "fe4f95b4176c732d71c00d765b9e22beff09a1ae9daff125fe3e6949d8c19d3b",
-  "damage": "CURRENT_GRANT is caller assertion. Only CUSTODY_GRANT exempts I3."
+  "engine_cases_sha256": "28be5acb9045959b5d99f3ef86f06787fe24f3f96634b9b80d7a6c583f8e8fd6",
+  "damage": "CURRENT_GRANT is caller assertion. Schema is not tissue. Personal result is not cohort."
 }

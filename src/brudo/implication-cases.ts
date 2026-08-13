@@ -28,6 +28,8 @@ export const CASES: Case[] = [
   { id: "z3-branch-not-tree", zone: "Z3", name: "A blocked branch is not a blocked tree", facts: { BLOCKED_BRANCH: true, INFER_BLOCKED_TREE: true }, expectPass: false },
   { id: "z1-muscle-without-ramp", zone: "Z1", name: "Muscle work without an open ramp is not flow", facts: { MUSCLE_WORK: true, WANT_FLOW: true }, expectPass: false },
   { id: "z1-muscle-with-ramp", zone: "Z1", name: "Muscle work with an open ramp may be flow", facts: { MUSCLE_WORK: true, WANT_FLOW: true, OPEN_RAMP: true }, expectPass: true },
+  { id: "z1-schema-is-not-tissue", zone: "Z1", name: "A tissue schema is not a trained tissue", facts: { TISSUE_SCHEMA: true, INFER_TISSUE_TRAINED: true }, expectPass: false },
+  { id: "z2-personal-result-not-cohort", zone: "Z2", name: "A personal result is not a cohort", facts: { PERSONAL_RESULT: true, INFER_COHORT: true }, expectPass: false },
 ];
 
 export const FROZEN_EXPECT = [
@@ -48,6 +50,8 @@ export const FROZEN_EXPECT = [
   false,
   false,
   true,
+  false,
+  false,
 ] as const;
 
 export function runCase(c: Case) {

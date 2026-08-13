@@ -25,7 +25,9 @@ export function checkImplications(f: Facts): Hit[] {
   });
 
   const pictureIsObject =
-    (f.PI_W_EQ_R && f.INFER_W_EQ_INV_PI) || (f.SPACED_LAYOUT && f.INFER_SOURCE_UNEDITED);
+    (f.PI_W_EQ_R && f.INFER_W_EQ_INV_PI) ||
+    (f.SPACED_LAYOUT && f.INFER_SOURCE_UNEDITED) ||
+    (f.TISSUE_SCHEMA && f.INFER_TISSUE_TRAINED);
   hits.push({
     id: "I2_REPRESENTATION_NOT_OBJECT",
     ok: !pictureIsObject,
@@ -33,7 +35,9 @@ export function checkImplications(f: Facts): Hit[] {
   });
 
   const priorDonates =
-    (f.ARCHIVE && f.WANT_EXECUTE && !f.CUSTODY_GRANT) || (f.EMPTY_PENDING && f.INFER_RELEVANT_NEW);
+    (f.ARCHIVE && f.WANT_EXECUTE && !f.CUSTODY_GRANT) ||
+    (f.EMPTY_PENDING && f.INFER_RELEVANT_NEW) ||
+    (f.PERSONAL_RESULT && f.INFER_COHORT);
   hits.push({
     id: "I3_PRIOR_NOT_NEW_CONSEQUENCE",
     ok: !priorDonates,
