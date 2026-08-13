@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { runFrozen } from "../src/brudo/implication-cases.ts";
+import { CLAIM_PROVENANCE, CLAIM_RECORDS, EXPECTED } from "../src/lib/canon/loader.ts";
+import { admitRegistry } from "../src/lib/canon/admit-registry.ts";
 
 function sha256(path: string) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
@@ -45,4 +47,33 @@ if (!freeze.freezeMatch || !freeze.allNamed || freeze.z4 || freeze.count !== JSO
   throw new Error(`native freeze failed ${JSON.stringify(freeze)}`);
 }
 
-console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files), forbidden: forbidden.paths.length, freeze: freeze.count }, null, 2));
+const admitted = admitRegistry({ records: CLAIM_RECORDS, provenance: CLAIM_PROVENANCE });
+const collapsed = admitRegistry({
+  records: CLAIM_RECORDS,
+  provenance: { ...CLAIM_PROVENANCE, extractSha256: CLAIM_PROVENANCE.memberSha256 },
+});
+const wrongBox = admitRegistry({
+  records: CLAIM_RECORDS,
+  provenance: { ...CLAIM_PROVENANCE, archiveSha256: "0".repeat(64) },
+});
+const wholesale = admitRegistry({ records: CLAIM_RECORDS, provenance: CLAIM_PROVENANCE, allowWholesale: true });
+const db = admitRegistry({ records: CLAIM_RECORDS, provenance: CLAIM_PROVENANCE, writeDatabase: true });
+if (
+  admitted.admissionState !== "ADMITTED" ||
+  admitted.identity?.declaredSourceMember !== EXPECTED.declaredSourceMember ||
+  CLAIM_RECORDS.length !== 60 ||
+  collapsed.primaryFailedPredicate !== "MEMBER_EXTRACT_COLLAPSED" ||
+  wrongBox.primaryFailedPredicate !== "CONTAINER_DIGEST_MISMATCH" ||
+  wholesale.primaryFailedPredicate !== "WHOLESALE_INGEST_REFUSED" ||
+  db.primaryFailedPredicate !== "DATABASE_WRITE_REFUSED"
+) {
+  throw new Error(JSON.stringify({ admitted, collapsed, wrongBox, wholesale, db }));
+}
+
+console.log(JSON.stringify({
+  ok: true,
+  files: Object.keys(provenance.files),
+  forbidden: forbidden.paths.length,
+  freeze: freeze.count,
+  registry: admitted.admissionState,
+}, null, 2));

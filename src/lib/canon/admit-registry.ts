@@ -1,4 +1,4 @@
-import { EXPECTED, type ClaimProvenance } from "./loader";
+import { EXPECTED, type ClaimProvenance } from "./loader.ts";
 import type { ClaimRecord } from "./types";
 
 export type RegistryIdentity = {

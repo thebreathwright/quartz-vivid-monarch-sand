@@ -1,4 +1,4 @@
-import raw from "./claims.json";
+import raw from "./claims.json" with { type: "json" };
 import type { ClaimRecord } from "./types";
 
 export type BindMode = "extract-only";
