@@ -11,6 +11,7 @@
     "src/lib/brudo/admission.ts": "f2bcde8c594335f08af4ee6582ef917778f39707242c5d4c5fe058c292948e9d",
     "src/lib/brudo/tome.lex": "cbf36391a33feb41a6c3a4a7053a3a441b8f0ca68a5183dc7fc35516e00c8e2c",
     "src/lib/canon/safety-boundary.json": "a81d91bea0a376bf9557df7566e4e75584e025c639e7b5a98ec1767dfa10bc66",
-    "src/lib/canon/boundary-h.json": "ea5845fd71150d7025072560d804d9c522c191e270f22a5a245559598b6e8401"
+    "src/lib/canon/boundary-h.json": "ea5845fd71150d7025072560d804d9c522c191e270f22a5a245559598b6e8401",
+    "src/brudo/implication-cases.json": "0c5fe1deb7c1bc659aa917237f492134c68f57a6c59a18acee3aa621ddd3e537"
   }
 }
