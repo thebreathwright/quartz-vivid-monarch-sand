@@ -1,0 +1,17 @@
+{
+  "id": "S",
+  "kind": "safety_boundary",
+  "hold": {
+    "id": "hold",
+    "kind": "supervised_pause_record",
+    "breath_hold_target": false,
+    "supervisor": "the_holder",
+    "text": "Hold is a supervised pause record. The holder is the supervisor. There is no breath-hold target. Air hunger ends the pause."
+  },
+  "hard_blocks": [
+    { "id": "water", "text": "No breathwork in or near water." },
+    { "id": "driving", "text": "No breathwork while driving or using tools." },
+    { "id": "blackout", "text": "No pass-out-seeking." },
+    { "id": "child", "text": "No protocol administered to a child." }
+  ]
+}

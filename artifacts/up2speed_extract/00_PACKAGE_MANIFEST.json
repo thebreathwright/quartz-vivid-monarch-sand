@@ -1,0 +1,70 @@
+{
+  "package": "CANONICAL_RECONSTRUCTION_SYSTEM",
+  "version": "0.2.0-seed",
+  "created_utc": "2026-05-27T19:05:10Z",
+  "requested_files": [
+    "00_README_FIELD_KERNEL.md",
+    "03_claim_registry.seed.jsonl",
+    "04_concept_graph.seed.jsonld",
+    "09_rewrite_priority_map.seed.jsonl",
+    "10_protocol_safety_firewall.yaml",
+    "11_symbolic_mapping_registry.seed.jsonl"
+  ],
+  "extra_files": [
+    "00_PACKAGE_MANIFEST.json",
+    "VALIDATION_REPORT.md"
+  ],
+  "sources": {
+    "CROSS_TUJALK": {
+      "file": "CROSS_TUJALK.txt",
+      "role": "branch-session digest defining Canonical Reconstruction System, graph-first design, claim ladder, rewrite fates, and safety/symbolic sequencing",
+      "citation_hint": "turn7file0 / turn7file1 / turn7file4 / turn7file5 / turn7file6"
+    },
+    "PASTED_MARKDOWN_5": {
+      "file": "Pasted markdown(5).md",
+      "role": "latest branch-session handoff defining Respiratory Adaptation Canon, FWOCR correction, sequencing, technical package, and late-bound symbolism",
+      "citation_hint": "turn7file2 / turn7file3 / turn7file7 / turn7file8 / turn7file9 / turn7file10 / turn7file12 / turn7file17"
+    },
+    "HOLY_GRAIL_PAPER": {
+      "file": "The Holy Grail as a Bronchial-Tree Symbol(2).pdf",
+      "role": "conservative biomedical seed for bronchial tree, ASL, cilia, mucociliary transport, heat/water recovery, and symbolic mappings",
+      "citation_hint": "turn6file2"
+    },
+    "THE_BE_EU_PROGRAM": {
+      "file": "THE_BE_EU_PROgrºRAM(1).txt",
+      "role": "operational training/protocol source for nostril-to-cell loop, law hierarchy, Six-Nines metrics, protocol language, and safety warnings",
+      "citation_hint": "turn6file3"
+    },
+    "PKG_ARCHIVE_ZIP": {
+      "file": "_PKG_MKR_GLOBAL_.zip",
+      "role": "source archive containing broader paper/document corpus for later manifest and source-document registry",
+      "citation_hint": "turn6file1"
+    }
+  },
+  "validation": [
+    {
+      "file": "03_claim_registry.seed.jsonl",
+      "status": "valid_jsonl",
+      "records": 60
+    },
+    {
+      "file": "09_rewrite_priority_map.seed.jsonl",
+      "status": "valid_jsonl",
+      "records": 40
+    },
+    {
+      "file": "11_symbolic_mapping_registry.seed.jsonl",
+      "status": "valid_jsonl",
+      "records": 20
+    },
+    {
+      "file": "04_concept_graph.seed.jsonld",
+      "status": "valid_json",
+      "records": 146
+    },
+    {
+      "file": "10_protocol_safety_firewall.yaml",
+      "status": "valid_yaml"
+    }
+  ]
+}

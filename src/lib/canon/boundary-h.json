@@ -1,0 +1,33 @@
+{
+  "id": "H",
+  "kind": "negative_boundary",
+  "status": "KILLED_EDGE",
+  "covid_claim_in_corpus": false,
+  "current_smoker_signal_is_hme_dose_response": false,
+  "smoke_route": "RAC-CLM-049",
+  "classes": [
+    {
+      "id": "H-measure",
+      "class": "measurement",
+      "status": "SURVIVES",
+      "text": "HME function is shown: 37 °C / 100% RH target, ~40–50% expiratory recovery, organ-scale heat share. Measurement and safety gating survive. Beneficial-training language does not."
+    },
+    {
+      "id": "H-mech",
+      "class": "injury",
+      "status": "COUNTEREXAMPLE",
+      "text": "Smoker-derived airway cells: blunted antiviral interferon. Smoke models: higher entry-factor expression, barrier disruption, mucus hypersecretion, ciliary disorder. Injury, not a trained epithelium."
+    },
+    {
+      "id": "H-obs",
+      "class": "observation",
+      "status": "NOT_AN_EDGE",
+      "text": "No COVID claim in RAC-CLM-001..060. Current-smoker infection signal is a repeated observation. It cannot become an HME dose-response. RAC-CLM-049 rewrites smoke."
+    }
+  ],
+  "killed": [
+    "beneficial-training language",
+    "smoke trains the tree",
+    "incidence donates HME ceiling"
+  ]
+}

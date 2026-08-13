@@ -1,0 +1,73 @@
+# Brudo Skill Inventory (Durable)
+Generated: 2026-07-25T06:04:40.147776Z
+Total skills on disk: 59
+
+## Higher-Level Composition Layer
+- brudo-project-instructions
+- brudo-session-bootstrap
+- brudo-stack-orchestrator
+- brudo-epistemic-kernel
+- brudo-respiratory-orchestrator
+- brudo-program-orchestrator
+- brudo-invariant-enforcer
+
+## Full list
+- brudo-airway-work-order
+- brudo-archive-ingest
+- brudo-authorized-initiative
+- brudo-breath-year
+- brudo-campaign-package
+- brudo-claim-registry
+- brudo-cognitive-apprenticeship
+- brudo-conditioning-tree
+- brudo-contradiction-register
+- brudo-coordinate-class-break
+- brudo-deep-research-program
+- brudo-epistemic-kernel
+- brudo-evidence-grading-rubric
+- brudo-evidence-ranking
+- brudo-execution-mode
+- brudo-functional-grail-surface
+- brudo-fwocr
+- brudo-hannahs-law
+- brudo-her-claim-audit
+- brudo-human-burden
+- brudo-invariant-enforcer
+- brudo-ipanm
+- brudo-late-bound-symbolism
+- brudo-legal-filing-atlas
+- brudo-lexical-technology
+- brudo-lexitek
+- brudo-lrd-pcmm
+- brudo-map-interrogation
+- brudo-mechanistic-rendering
+- brudo-methods-matrix
+- brudo-objective-control
+- brudo-operating-status
+- brudo-osa-domain-misclassification
+- brudo-overlap-contract
+- brudo-portfolio-governance
+- brudo-program-orchestrator
+- brudo-program-risk-register
+- brudo-progressive-overload-airway
+- brudo-project-instructions
+- brudo-promotion-asymmetry
+- brudo-research-ethics-gate
+- brudo-research-handoff
+- brudo-research-methods-matrix
+- brudo-respiratory-adaptation
+- brudo-respiratory-orchestrator
+- brudo-return-gate
+- brudo-seed-bibliography
+- brudo-self-discovery
+- brudo-semiconductor-supply-chain
+- brudo-session-bootstrap
+- brudo-source-custody
+- brudo-source-priority-framework
+- brudo-stack-orchestrator
+- brudo-stale-recovery
+- brudo-sttdm
+- brudo-trie-causal-canon
+- brudo-work-panel
+- critical-infrastructure-cyber-resilience
+- respiratory-adaptation-canon
