@@ -1,0 +1,74 @@
+import { boundaryHolds, checkImplications, type Facts } from "./implication";
+
+export type Zone = "Z1" | "Z2" | "Z3";
+
+export type Case = {
+  id: string;
+  zone: Zone;
+  name: string;
+  facts: Facts;
+  expectPass: boolean;
+};
+
+export const CASES: Case[] = [
+  { id: "z1-unknown-may-resolve", zone: "Z1", name: "UNKNOWN may Resolve", facts: { UNKNOWN: true, RESOLVE: true }, expectPass: true },
+  { id: "z1-unknown-no-consequence", zone: "Z1", name: "UNKNOWN does not donate Consequence", facts: { UNKNOWN: true, WANT_CONSEQUENCE: true }, expectPass: false },
+  { id: "z1-unknown-no-execute", zone: "Z1", name: "UNKNOWN does not donate Execute", facts: { UNKNOWN: true, WANT_EXECUTE: true }, expectPass: false },
+  { id: "z1-unassessed-no-consequence", zone: "Z1", name: "UNASSESSED does not donate Consequence", facts: { UNASSESSED: true, WANT_CONSEQUENCE: true }, expectPass: false },
+  { id: "z1-picture-is-not-object", zone: "Z1", name: "π(W)=R does not imply W is the inverse", facts: { PI_W_EQ_R: true, INFER_W_EQ_INV_PI: true }, expectPass: false },
+  { id: "z1-layout-is-authorship", zone: "Z1", name: "Spaced layout is not the unedited source", facts: { SPACED_LAYOUT: true, INFER_SOURCE_UNEDITED: true }, expectPass: false },
+  { id: "z2-archive-no-execute", zone: "Z2", name: "ARCHIVE does not donate Execute", facts: { ARCHIVE: true, WANT_EXECUTE: true }, expectPass: false },
+  { id: "z2-asserted-grant-not-custody", zone: "Z2", name: "Caller-supplied currentGrant is not custody", facts: { ARCHIVE: true, WANT_EXECUTE: true, CURRENT_GRANT: true }, expectPass: false },
+  { id: "z2-custody-grant", zone: "Z2", name: "Authoritative custody may authorize Execute", facts: { ARCHIVE: true, WANT_EXECUTE: true, CUSTODY_GRANT: true }, expectPass: true },
+  { id: "z2-empty-not-relevant-new", zone: "Z2", name: "Empty pending does not imply relevant-new", facts: { EMPTY_PENDING: true, INFER_RELEVANT_NEW: true }, expectPass: false },
+  { id: "z3-rejected-not-unassessed", zone: "Z3", name: "REJECTED does not become UNASSESSED", facts: { REJECTED: true, UNASSESSED: true }, expectPass: false },
+  { id: "z3-audit-not-control", zone: "Z3", name: "Δ audit does not imply Δ control", facts: { DELTA_AUDIT: true, INFER_DELTA_CONTROL: true }, expectPass: false },
+  { id: "z3-render-not-control", zone: "Z3", name: "Δ render does not imply Δ control", facts: { DELTA_RENDER: true, INFER_DELTA_CONTROL: true }, expectPass: false },
+  { id: "z3-export-not-control", zone: "Z3", name: "Δ export does not imply Δ control", facts: { DELTA_EXPORT: true, INFER_DELTA_CONTROL: true }, expectPass: false },
+  { id: "z3-branch-not-tree", zone: "Z3", name: "A blocked branch is not a blocked tree", facts: { BLOCKED_BRANCH: true, INFER_BLOCKED_TREE: true }, expectPass: false },
+  { id: "z1-muscle-without-ramp", zone: "Z1", name: "Muscle work without an open ramp is not flow", facts: { MUSCLE_WORK: true, WANT_FLOW: true }, expectPass: false },
+  { id: "z1-muscle-with-ramp", zone: "Z1", name: "Muscle work with an open ramp may be flow", facts: { MUSCLE_WORK: true, WANT_FLOW: true, OPEN_RAMP: true }, expectPass: true },
+];
+
+export const FROZEN_EXPECT = [
+  true,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  true,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  true,
+] as const;
+
+export function runCase(c: Case) {
+  const hits = checkImplications(c.facts);
+  const actualPass = boundaryHolds(hits);
+  return {
+    id: c.id,
+    zone: c.zone,
+    name: c.name,
+    expectPass: c.expectPass,
+    actualPass,
+    passed: actualPass === c.expectPass,
+    hits: hits.filter((h) => !h.ok).map((h) => h.id),
+  };
+}
+
+export function runFrozen() {
+  const results = CASES.map(runCase);
+  const vector = results.map((r) => r.actualPass);
+  const freezeMatch = vector.every((v, i) => v === FROZEN_EXPECT[i]);
+  const allNamed = results.every((r) => r.passed);
+  const z4 = results.some((r) => (r.zone as string) === "Z4");
+  return { results, vector, freezeMatch, allNamed, z4, count: results.length };
+}

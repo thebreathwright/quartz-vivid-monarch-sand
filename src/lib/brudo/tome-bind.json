@@ -1,0 +1,9 @@
+{
+  "file": "src/lib/brudo/tome.lex",
+  "interpreter": "src/lib/brudo/tome.ts",
+  "cases": "src/lib/brudo/tome-cases.ts",
+  "sha256": "cbf36391a33feb41a6c3a4a7053a3a441b8f0ca68a5183dc7fc35516e00c8e2c",
+  "destinations": ["Z1", "Z2", "Z3"],
+  "not_destination": "Z4",
+  "borrowed_score": false
+}

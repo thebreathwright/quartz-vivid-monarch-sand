@@ -1,0 +1,41 @@
+{
+  "layout": "src/brudo/",
+  "engine": "src/brudo/implication.ts",
+  "cases": "src/brudo/implication-cases.ts",
+  "version": 2,
+  "five": [
+    "I1_UNKNOWN_NOT_CONSEQUENCE",
+    "I2_REPRESENTATION_NOT_OBJECT",
+    "I3_PRIOR_NOT_NEW_CONSEQUENCE",
+    "I4_RECORD_NOT_CONTROL",
+    "I5_PART_NOT_WHOLE"
+  ],
+  "case_count": 17,
+  "frozen_expect": [
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ],
+  "destinations": [
+    "Z1",
+    "Z2",
+    "Z3"
+  ],
+  "not_destination": "Z4",
+  "engine_cases_sha256": "fe4f95b4176c732d71c00d765b9e22beff09a1ae9daff125fe3e6949d8c19d3b",
+  "damage": "CURRENT_GRANT is caller assertion. Only CUSTODY_GRANT exempts I3."
+}

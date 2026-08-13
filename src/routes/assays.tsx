@@ -38,7 +38,7 @@ function AssaysPage() {
         </StatusChip>
       </div>
 
-      <Panel title="Results" kicker="Family A + Z4 residue + G">
+      <Panel title="Results" kicker="Family A + Z2 + Z4 residue + G">
         <ul className="divide-y divide-line">
           {assayResults.map((row) => (
             <li key={row.id} className="flex flex-col gap-2 py-4 sm:flex-row sm:items-start sm:justify-between">

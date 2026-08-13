@@ -3,3 +3,8 @@ node_modules/
 .github_repo
 .env
 .env.*
+
+# private — do not publish
+src/brudo/policy.ts
+src/brudo/ablation.ts
+screenshots/policy-pi.png

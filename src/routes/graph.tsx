@@ -8,21 +8,21 @@ export const Route = createFileRoute("/graph")({
 
 const FAMILIES = [
   {
-    id: "A",
+    id: "A / Z1",
     title: "Contract-anchored admission",
     status: "PRIMARY",
     tone: "admit" as const,
-    body: "Result contract rides in work identity and in the receipt. Execution and admission stay separate. REJECTED cannot become UNASSESSED. Candidates require ADMITTED.",
+    body: "Result contract rides in work identity and the receipt. UNKNOWN authorizes Resolve only — never Consequence. UNASSESSED cannot donate EXECUTE. REJECTED cannot become UNASSESSED.",
   },
   {
-    id: "B",
+    id: "B / Z2",
     title: "Replay / non-amplification",
-    status: "HOLD",
-    tone: "hold" as const,
-    body: "Prior ARCHIVE admission cannot donate EXECUTE. Z4 reopen collapsed into the unique-index-on-success predicate.",
+    status: "EDGE RUN",
+    tone: "admit" as const,
+    body: "ARCHIVE admission does not donate EXECUTE. A later EXECUTE needs a current grant. Z4 is not this family.",
   },
   {
-    id: "C",
+    id: "C / Z3",
     title: "Historical ≠ current",
     status: "DEPENDENT",
     tone: "mute" as const,
@@ -45,9 +45,9 @@ const FAMILIES = [
   {
     id: "Z4",
     title: "Successor nullifier",
-    status: "NARROWED",
+    status: "KILLED NUCLEUS",
     tone: "reject" as const,
-    body: "Not a distinct core. Residue is UNIQUE(capability, hash) WHERE CONSUMED. Five extra identity fields are excess for uniqueness. Durable invalid does not implement control exclusion.",
+    body: "Independent nucleus dead. Infrastructure retained. Audit retention merged to C/Z3. Production ledger adapter is engineering-only. Do not resurrect with more fields.",
   },
   {
     id: "G",
@@ -82,6 +82,18 @@ function GraphPage() {
         <p className="font-mono text-xs tracking-[0.16em] text-muted uppercase">Negative boundary</p>
         <h3 className="font-display text-2xl tracking-tight">One record. Three classes.</h3>
       </section>
+
+      <Panel title="Five-implication boundary" kicker="src/brudo">
+        <p className="text-sm text-muted">
+          UNKNOWN ⇏ Consequence. Representation ⇏ object. Prior ⇏ new consequence. Record ⇏ control. Part ⇏
+          whole. A caller-supplied grant is not custody. Seventeen cases frozen. Not Z4.
+        </p>
+        <p className="mt-3 break-all font-mono text-xs text-muted">
+          src/brudo/implication.ts
+          <br />
+          fe4f95b4176c732d71c00d765b9e22beff09a1ae9daff125fe3e6949d8c19d3b
+        </p>
+      </Panel>
 
       <Panel title={`Family ${BOUNDARY_H.id}`} kicker={BOUNDARY_H.kind}>
         <div className="mb-3 flex flex-wrap gap-2">

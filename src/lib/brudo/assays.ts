@@ -10,6 +10,7 @@ import {
 import { StateLedger } from "./ledger";
 import { SuccessorNullifier } from "./nullifier";
 import { sha256Hex } from "./hash";
+import { runFrozen } from "@/brudo";
 
 export type AssayResult = {
   id: string;
@@ -263,6 +264,125 @@ export async function runAssays(): Promise<AssayResult[]> {
       detail: `${wholesale.primaryFailedPredicate} / ${db.primaryFailedPredicate}`,
     });
   }
+
+  {
+    const digest = await sha256Hex(JSON.stringify(SAMPLE_NINE));
+    const archived: GenerativeReceipt = {
+      taskId: "t-arch",
+      resultDigest: digest,
+      resultContractId: CONTRACT_K1.id,
+      validatorId: "validator-k1",
+      executionState: "COMPLETED",
+      admissionState: "ADMITTED",
+      primaryFailedPredicate: null,
+      output: JSON.stringify(SAMPLE_NINE),
+      requestedConsequence: "ARCHIVE",
+      issuedAt: "2026-08-12T19:00:00Z",
+    };
+    const { requestConsequence } = await import("./admission");
+    const donated = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "NONE" });
+    const asserted = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "EXECUTE" });
+    const custody = requestConsequence({
+      receipt: archived,
+      wanted: "EXECUTE",
+      custody: {
+        capabilityId: "cap-exec",
+        scope: "EXECUTE",
+        authorityId: "auth-1",
+        sha256: "ab".repeat(32),
+      },
+    });
+    results.push({
+      id: "z2-no-donate",
+      name: "ARCHIVE does not donate EXECUTE; asserted grant is not custody",
+      passed:
+        "refused" in donated &&
+        donated.refused === "ARCHIVE_DOES_NOT_DONATE_EXECUTE" &&
+        "refused" in asserted &&
+        asserted.refused === "ASSERTED_GRANT_IS_NOT_CUSTODY" &&
+        "ok" in custody,
+      detail: `donate=${"refused" in donated ? donated.refused : "ok"} asserted=${"refused" in asserted ? asserted.refused : "ok"} custody=${"ok" in custody}`,
+    });
+  }
+
+  {
+    const { authorityFromUnknown } = await import("./admission");
+    const resolve = authorityFromUnknown({ predicate: "UNKNOWN", action: "RESOLVE" });
+    const consequence = authorityFromUnknown({ predicate: "UNKNOWN", action: "CONSEQUENCE" });
+    const execute = authorityFromUnknown({ predicate: "UNKNOWN", action: "EXECUTE" });
+    const known = authorityFromUnknown({ predicate: "TRUE", action: "CONSEQUENCE" });
+    results.push({
+      id: "z1-unknown-resolve",
+      name: "UNKNOWN authorizes Resolve only; never Consequence",
+      passed:
+        "ok" in resolve &&
+        "refused" in consequence &&
+        consequence.refused === "UNKNOWN_DOES_NOT_AUTHORIZE_CONSEQUENCE" &&
+        "refused" in execute &&
+        "ok" in known,
+      detail: `resolve=${"ok" in resolve} cons=${"refused" in consequence ? consequence.refused : "ok"} exec=${"refused" in execute ? execute.refused : "ok"}`,
+    });
+  }
+
+  {
+    const evaled = evaluateAdmission({
+      rawOutput: JSON.stringify(SAMPLE_NINE),
+      contract: CONTRACT_K1,
+      executionState: "EXECUTING",
+    });
+    const receipt: GenerativeReceipt = {
+      taskId: "t-unk",
+      resultDigest: "0".repeat(64),
+      resultContractId: CONTRACT_K1.id,
+      validatorId: "validator-k1",
+      executionState: "EXECUTING",
+      admissionState: evaled.admissionState,
+      primaryFailedPredicate: evaled.primaryFailedPredicate,
+      output: JSON.stringify(SAMPLE_NINE),
+      requestedConsequence: "CANDIDATE",
+      issuedAt: "2026-08-12T19:00:00Z",
+    };
+    const { requestConsequence } = await import("./admission");
+    const gated = requestConsequence({
+      receipt,
+      wanted: "EXECUTE",
+      custody: {
+        capabilityId: "cap-exec",
+        scope: "EXECUTE",
+        authorityId: "auth-1",
+        sha256: "ab".repeat(32),
+      },
+    });
+    results.push({
+      id: "z1-unassessed-no-consequence",
+      name: "UNASSESSED receipt cannot donate EXECUTE even with custody",
+      passed:
+        evaled.admissionState === "UNASSESSED" &&
+        "refused" in gated &&
+        gated.refused === "ADMISSION_NOT_ADMITTED",
+      detail: `${evaled.admissionState} / ${"refused" in gated ? gated.refused : "ok"}`,
+    });
+  }
+
+  {
+    const run = runFrozen();
+    results.push({
+      id: "implication-freeze",
+      name: "Five-implication boundary frozen (src/brudo)",
+      passed: run.freezeMatch && run.allNamed && !run.z4 && run.count === 17,
+      detail: `n=${run.count} freeze=${run.freezeMatch} named=${run.allNamed} z4=${run.z4}`,
+    });
+    for (const c of run.results) {
+      results.push({
+        id: c.id,
+        name: `[${c.zone}] ${c.name}`,
+        passed: c.passed,
+        detail: c.hits.join("; ") || `expectPass=${c.expectPass}`,
+      });
+    }
+  }
+
+
 
   return results;
 }

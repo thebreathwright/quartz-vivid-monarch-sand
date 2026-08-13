@@ -122,6 +122,66 @@ export function evaluateAdmission(args: {
   return { admissionState: "ADMITTED", primaryFailedPredicate: null };
 }
 
+
+export type GrantCustody = {
+  capabilityId: string;
+  scope: "EXECUTE";
+  authorityId: string;
+  sha256: string;
+};
+
+export function isExecuteCustody(custody: GrantCustody | null | undefined): custody is GrantCustody {
+  return Boolean(
+    custody &&
+      custody.scope === "EXECUTE" &&
+      custody.capabilityId &&
+      custody.authorityId &&
+      /^[0-9a-f]{64}$/.test(custody.sha256),
+  );
+}
+
+export function requestConsequence(args: {
+  receipt: GenerativeReceipt;
+  wanted: "EXECUTE" | "ARCHIVE" | "CANDIDATE";
+  assertedGrant?: "EXECUTE" | "ARCHIVE" | "NONE";
+  custody?: GrantCustody | null;
+}): { ok: true } | { refused: string } {
+  const custodyOk = isExecuteCustody(args.custody);
+  if (args.wanted === "EXECUTE" || args.wanted === "CANDIDATE") {
+    if (args.receipt.requestedConsequence === "ARCHIVE" && !custodyOk) {
+      if (args.assertedGrant === "EXECUTE") {
+        return { refused: "ASSERTED_GRANT_IS_NOT_CUSTODY" };
+      }
+      return { refused: "ARCHIVE_DOES_NOT_DONATE_EXECUTE" };
+    }
+    if (!custodyOk) {
+      if (args.assertedGrant === "EXECUTE") {
+        return { refused: "ASSERTED_GRANT_IS_NOT_CUSTODY" };
+      }
+      return { refused: "NO_CUSTODY_GRANT" };
+    }
+  }
+  if (args.receipt.admissionState !== "ADMITTED") {
+    return { refused: "ADMISSION_NOT_ADMITTED" };
+  }
+  return { ok: true };
+}
+
+export type PredicateState = "UNKNOWN" | "TRUE" | "FALSE";
+export type UnknownAction = "RESOLVE" | "CONSEQUENCE" | "EXECUTE" | "CANDIDATE";
+
+/** UNKNOWN authorizes Resolve only. It never authorizes Consequence. */
+export function authorityFromUnknown(args: {
+  predicate: PredicateState;
+  action: UnknownAction;
+}): { ok: true } | { refused: string } {
+  if (args.predicate === "UNKNOWN") {
+    if (args.action === "RESOLVE") return { ok: true };
+    return { refused: "UNKNOWN_DOES_NOT_AUTHORIZE_CONSEQUENCE" };
+  }
+  return { ok: true };
+}
+
 export function candidateFromReceipt(receipt: GenerativeReceipt): CandidateRecord | { refused: string } {
   if (receipt.executionState !== "COMPLETED") {
     return { refused: "EXECUTION_NOT_COMPLETED" };
