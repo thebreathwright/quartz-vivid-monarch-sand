@@ -82,6 +82,9 @@ test("admission runtime refuses asserted grant without custody", () => {
   const src = readFileSync("src/lib/brudo/admission.ts", "utf8");
   assert.match(src, /ASSERTED_GRANT_IS_NOT_CUSTODY/);
   assert.match(src, /isExecuteCustody/);
+  assert.match(src, /custodyBindsReceipt/);
+  assert.match(src, /CUSTODY_DIGEST_MISMATCH/);
+  assert.match(src, /CUSTODY_CONTRACT_MISMATCH/);
   assert.match(src, /ARCHIVE_DOES_NOT_DONATE_EXECUTE/);
   assert.doesNotMatch(src, /from ["']@\/brudo\/policy/);
   assert.doesNotMatch(src, /runAblation/);

@@ -280,17 +280,26 @@ export async function runAssays(): Promise<AssayResult[]> {
       issuedAt: "2026-08-12T19:00:00Z",
     };
     const { requestConsequence } = await import("./admission");
+    const bound = {
+      capabilityId: "cap-exec",
+      scope: "EXECUTE" as const,
+      authorityId: "auth-1",
+      resultDigest: digest,
+      resultContractId: CONTRACT_K1.id,
+      sha256: "ab".repeat(32),
+    };
     const donated = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "NONE" });
     const asserted = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "EXECUTE" });
-    const custody = requestConsequence({
+    const custody = requestConsequence({ receipt: archived, wanted: "EXECUTE", custody: bound });
+    const wrongDigest = requestConsequence({
       receipt: archived,
       wanted: "EXECUTE",
-      custody: {
-        capabilityId: "cap-exec",
-        scope: "EXECUTE",
-        authorityId: "auth-1",
-        sha256: "ab".repeat(32),
-      },
+      custody: { ...bound, resultDigest: "cd".repeat(32) },
+    });
+    const wrongContract = requestConsequence({
+      receipt: archived,
+      wanted: "EXECUTE",
+      custody: { ...bound, resultContractId: "other-contract" },
     });
     results.push({
       id: "z2-no-donate",
@@ -302,6 +311,17 @@ export async function runAssays(): Promise<AssayResult[]> {
         asserted.refused === "ASSERTED_GRANT_IS_NOT_CUSTODY" &&
         "ok" in custody,
       detail: `donate=${"refused" in donated ? donated.refused : "ok"} asserted=${"refused" in asserted ? asserted.refused : "ok"} custody=${"ok" in custody}`,
+    });
+    results.push({
+      id: "z2-custody-binds-digest-contract",
+      name: "Custody must bind admitted result digest and result contract",
+      passed:
+        "ok" in custody &&
+        "refused" in wrongDigest &&
+        wrongDigest.refused === "CUSTODY_DIGEST_MISMATCH" &&
+        "refused" in wrongContract &&
+        wrongContract.refused === "CUSTODY_CONTRACT_MISMATCH",
+      detail: `bound=${"ok" in custody} digest=${"refused" in wrongDigest ? wrongDigest.refused : "ok"} contract=${"refused" in wrongContract ? wrongContract.refused : "ok"}`,
     });
   }
 
@@ -350,6 +370,8 @@ export async function runAssays(): Promise<AssayResult[]> {
         capabilityId: "cap-exec",
         scope: "EXECUTE",
         authorityId: "auth-1",
+        resultDigest: receipt.resultDigest,
+        resultContractId: receipt.resultContractId,
         sha256: "ab".repeat(32),
       },
     });

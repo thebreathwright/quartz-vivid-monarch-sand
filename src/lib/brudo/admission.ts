@@ -127,6 +127,8 @@ export type GrantCustody = {
   capabilityId: string;
   scope: "EXECUTE";
   authorityId: string;
+  resultDigest: string;
+  resultContractId: string;
   sha256: string;
 };
 
@@ -136,7 +138,20 @@ export function isExecuteCustody(custody: GrantCustody | null | undefined): cust
       custody.scope === "EXECUTE" &&
       custody.capabilityId &&
       custody.authorityId &&
+      /^[0-9a-f]{64}$/.test(custody.resultDigest) &&
+      Boolean(custody.resultContractId) &&
       /^[0-9a-f]{64}$/.test(custody.sha256),
+  );
+}
+
+export function custodyBindsReceipt(
+  custody: GrantCustody | null | undefined,
+  receipt: GenerativeReceipt,
+): custody is GrantCustody {
+  return (
+    isExecuteCustody(custody) &&
+    custody.resultDigest === receipt.resultDigest &&
+    custody.resultContractId === receipt.resultContractId
   );
 }
 
@@ -146,19 +161,23 @@ export function requestConsequence(args: {
   assertedGrant?: "EXECUTE" | "ARCHIVE" | "NONE";
   custody?: GrantCustody | null;
 }): { ok: true } | { refused: string } {
-  const custodyOk = isExecuteCustody(args.custody);
+  const shapeOk = isExecuteCustody(args.custody);
+  const bound = custodyBindsReceipt(args.custody, args.receipt);
   if (args.wanted === "EXECUTE" || args.wanted === "CANDIDATE") {
-    if (args.receipt.requestedConsequence === "ARCHIVE" && !custodyOk) {
+    if (!shapeOk) {
       if (args.assertedGrant === "EXECUTE") {
         return { refused: "ASSERTED_GRANT_IS_NOT_CUSTODY" };
       }
-      return { refused: "ARCHIVE_DOES_NOT_DONATE_EXECUTE" };
-    }
-    if (!custodyOk) {
-      if (args.assertedGrant === "EXECUTE") {
-        return { refused: "ASSERTED_GRANT_IS_NOT_CUSTODY" };
+      if (args.receipt.requestedConsequence === "ARCHIVE") {
+        return { refused: "ARCHIVE_DOES_NOT_DONATE_EXECUTE" };
       }
       return { refused: "NO_CUSTODY_GRANT" };
+    }
+    if (!bound) {
+      if (args.custody && args.custody.resultDigest !== args.receipt.resultDigest) {
+        return { refused: "CUSTODY_DIGEST_MISMATCH" };
+      }
+      return { refused: "CUSTODY_CONTRACT_MISMATCH" };
     }
   }
   if (args.receipt.admissionState !== "ADMITTED") {
