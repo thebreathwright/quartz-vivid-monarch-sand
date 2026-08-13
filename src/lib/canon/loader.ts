@@ -6,6 +6,7 @@ export type BindMode = "extract-only";
 export type ClaimProvenance = {
   bindMode: BindMode;
   sourceArchive: string;
+  sourceArchiveKind: "historical-label-absent-from-tip";
   declaredSourceMember: string;
   declaredSourceMemberPath: string;
   sourceFile: string;
@@ -45,6 +46,7 @@ const REQUIRED: (keyof ClaimRecord)[] = [
 /** Declared source is the seed member. claims.json is only the runtime extract. */
 export const EXPECTED = {
   sourceArchive: "UP2SPEED.zip",
+  sourceArchiveKind: "historical-label-absent-from-tip" as const,
   declaredSourceMember: "03_claim_registry.seed.jsonl",
   declaredSourceMemberPath:
     "ALEF_v0.4_schema_validated_package/CANONICAL_RECONSTRUCTION_SYSTEM/03_claim_registry.seed.jsonl",
@@ -86,6 +88,7 @@ export function loadClaimRegistry(): { records: ClaimRecord[]; provenance: Claim
   const provenance: ClaimProvenance = {
     bindMode: "extract-only",
     sourceArchive: EXPECTED.sourceArchive,
+    sourceArchiveKind: EXPECTED.sourceArchiveKind,
     declaredSourceMember: EXPECTED.declaredSourceMember,
     declaredSourceMemberPath: EXPECTED.declaredSourceMemberPath,
     sourceFile: EXPECTED.declaredSourceMemberPath,

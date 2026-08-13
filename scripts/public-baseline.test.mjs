@@ -81,3 +81,21 @@ test("forbidden raw bundles and traces are absent from the git tip", () => {
     assert.deepEqual(under, [], `extract still on tip under ${prefix}: ${under.join(", ")}`);
   }
 });
+
+test("historical archive name is not a live tip dependency", () => {
+  const src = readFileSync("src/lib/canon/loader.ts", "utf8");
+  assert.match(src, /sourceArchiveKind: "historical-label-absent-from-tip"/);
+  assert.match(src, /wholesaleArchiveIngested: false/);
+  assert.match(src, /bindMode: "extract-only"/);
+  assert.match(src, /import raw from "\.\/claims\.json"/);
+  assert.doesNotMatch(src, /attachments\/UP2SPEED\.zip/);
+  assert.doesNotMatch(src, /zipfile|JSZip|yauzl/);
+  const zips = execFileSync("git", ["ls-files", "--", "attachments/UP2SPEED.zip", "UP2SPEED.zip"], { encoding: "utf8" })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  assert.deepEqual(zips, []);
+  const live = execFileSync("git", ["ls-files", "--", "artifacts/family_g/test_nested_archive.py"], { encoding: "utf8" })
+    .trim();
+  assert.equal(live, "");
+});
