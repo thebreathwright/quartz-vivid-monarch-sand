@@ -6,9 +6,9 @@
   ],
   "files": {
     "src/brudo/implication.ts": "5f475d876910fac599990626f239cc1b342cac0d2ed8e2bf3b7bfbee02fe5fe1",
-    "src/brudo/implication-cases.ts": "3739e47b43dd8585b7955cf4f4d19f66489e5293d788e128aa9aaec37ee9b3e8",
+    "src/brudo/implication-cases.ts": "075db3ccfdbbdf6bdac4ba1552bb11aa56ee0f27e0c1eccf980e8f4006b1935b",
     "src/brudo/implication-freeze.json": "49eee1e8a1a8632816d9ffba7e4efb138aaaab378301d9139a8162affe56c641",
-    "src/lib/brudo/admission.ts": "4fc93c08909e881cc06f7160e68ec0126325e539f465740a59af306e3874a491",
+    "src/lib/brudo/admission.ts": "869967b940e3f94d4052b5e1e6b44351b88c9d60e39bf991bbce054a7f3ab3a3",
     "src/lib/brudo/tome.lex": "cbf36391a33feb41a6c3a4a7053a3a441b8f0ca68a5183dc7fc35516e00c8e2c",
     "src/lib/canon/safety-boundary.json": "a81d91bea0a376bf9557df7566e4e75584e025c639e7b5a98ec1767dfa10bc66",
     "src/lib/canon/boundary-h.json": "ea5845fd71150d7025072560d804d9c522c191e270f22a5a245559598b6e8401",

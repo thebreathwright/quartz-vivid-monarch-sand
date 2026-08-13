@@ -1,4 +1,4 @@
-import { sha256Hex } from "./hash";
+import { sha256Hex } from "./hash.ts";
 
 export type ExecutionState = "NOT_STARTED" | "EXECUTING" | "COMPLETED" | "FAILED";
 export type AdmissionState = "UNASSESSED" | "ADMITTED" | "REJECTED" | "WITHHELD";

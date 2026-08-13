@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { runFrozen } from "../src/brudo/implication-cases.ts";
 
 function sha256(path: string) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
@@ -39,4 +40,9 @@ for (const prefix of (forbidden.prefixes ?? []) as string[]) {
   if (under.length) throw new Error(`forbidden prefix on tip ${prefix}: ${under.join(", ")}`);
 }
 
-console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files), forbidden: forbidden.paths.length }, null, 2));
+const freeze = runFrozen();
+if (!freeze.freezeMatch || !freeze.allNamed || freeze.z4 || freeze.count !== 17) {
+  throw new Error(`native freeze failed ${JSON.stringify(freeze)}`);
+}
+
+console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files), forbidden: forbidden.paths.length, freeze: freeze.count }, null, 2));

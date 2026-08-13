@@ -1,4 +1,4 @@
-import { boundaryHolds, checkImplications, type Facts } from "./implication";
+import { boundaryHolds, checkImplications, type Facts } from "./implication.ts";
 
 export type Zone = "Z1" | "Z2" | "Z3";
 
