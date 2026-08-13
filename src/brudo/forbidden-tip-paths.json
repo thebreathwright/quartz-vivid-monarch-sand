@@ -1,5 +1,5 @@
 {
-  "reason": "Raw bundles and interface traces must stay off the public tip. Derived reports, extracts, and screenshots remain.",
+  "reason": "Raw bundles, interface traces, and unpacked extract payloads must stay off the public tip. Derived reports and screenshots remain.",
   "paths": [
     "attachments/UP2SPEED.zip",
     "attachments/_PKG_MKR_GLOBAL_.zip",
@@ -12,5 +12,8 @@
     "attachments/pasted-text.txt",
     "artifacts/handmade_set/CODEBASE_INTRFACE_33.txt",
     "artifacts/handmade_set/CODEBASE_INTRFACE_34.txt"
+  ],
+  "prefixes": [
+    "artifacts/up2speed_extract/"
   ]
 }

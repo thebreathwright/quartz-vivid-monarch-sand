@@ -9,8 +9,9 @@ src/brudo/policy.ts
 src/brudo/ablation.ts
 screenshots/policy-pi.png
 
-# raw archives / traces — keep off the public tip
+# raw archives / traces / unpacked extracts — keep off the public tip
 attachments/*.zip
 attachments/CODEBASE_INTRFACE_*.txt
 attachments/pasted-text.txt
 artifacts/handmade_set/CODEBASE_INTRFACE_*.txt
+artifacts/up2speed_extract/

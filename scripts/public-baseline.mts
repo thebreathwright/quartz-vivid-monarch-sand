@@ -31,5 +31,12 @@ const present = execFileSync("git", ["ls-files", "--", ...forbidden.paths], { en
   .split("\n")
   .filter(Boolean);
 if (present.length) throw new Error(`forbidden paths on tip: ${present.join(", ")}`);
+for (const prefix of (forbidden.prefixes ?? []) as string[]) {
+  const under = execFileSync("git", ["ls-files", "--", prefix], { encoding: "utf8" })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  if (under.length) throw new Error(`forbidden prefix on tip ${prefix}: ${under.join(", ")}`);
+}
 
 console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files), forbidden: forbidden.paths.length }, null, 2));

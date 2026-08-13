@@ -91,7 +91,7 @@ test("admission runtime refuses asserted grant without custody", () => {
 });
 
 test("forbidden raw bundles and traces are absent from the git tip", () => {
-  const { paths } = JSON.parse(readFileSync("src/brudo/forbidden-tip-paths.json", "utf8"));
+  const { paths, prefixes = [] } = JSON.parse(readFileSync("src/brudo/forbidden-tip-paths.json", "utf8"));
   assert.ok(paths.length > 0);
   const tracked = execFileSync("git", ["ls-files", "--", ...paths], { encoding: "utf8" })
     .trim()
@@ -103,4 +103,11 @@ test("forbidden raw bundles and traces are absent from the git tip", () => {
     .split("\n")
     .filter(Boolean);
   assert.deepEqual(zips, [], `zip still on tip: ${zips.join(", ")}`);
+  for (const prefix of prefixes) {
+    const under = execFileSync("git", ["ls-files", "--", prefix], { encoding: "utf8" })
+      .trim()
+      .split("\n")
+      .filter(Boolean);
+    assert.deepEqual(under, [], `extract still on tip under ${prefix}: ${under.join(", ")}`);
+  }
 });
