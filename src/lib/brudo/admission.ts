@@ -157,7 +157,7 @@ export async function custodySealHex(args: { resultDigest: string; resultContrac
 export function custodyBindsReceipt(
   custody: GrantCustody | null | undefined,
   receipt: GenerativeReceipt,
-): custody is GrantCustody {
+): boolean {
   return (
     isExecuteCustody(custody) &&
     custody.resultDigest === receipt.resultDigest &&
@@ -171,10 +171,9 @@ export async function requestConsequence(args: {
   assertedGrant?: "EXECUTE" | "ARCHIVE" | "NONE";
   custody?: GrantCustody | null;
 }): Promise<{ ok: true } | { refused: string }> {
-  const shapeOk = isExecuteCustody(args.custody);
-  const bound = custodyBindsReceipt(args.custody, args.receipt);
+  const custody = args.custody;
   if (args.wanted === "EXECUTE" || args.wanted === "CANDIDATE") {
-    if (!shapeOk) {
+    if (!isExecuteCustody(custody)) {
       if (args.assertedGrant === "EXECUTE") {
         return { refused: "ASSERTED_GRANT_IS_NOT_CUSTODY" };
       }
@@ -183,17 +182,14 @@ export async function requestConsequence(args: {
       }
       return { refused: "NO_CUSTODY_GRANT" };
     }
-    if (!bound) {
-      if (args.custody && args.custody.resultDigest !== args.receipt.resultDigest) {
+    if (!custodyBindsReceipt(custody, args.receipt)) {
+      if (custody.resultDigest !== args.receipt.resultDigest) {
         return { refused: "CUSTODY_DIGEST_MISMATCH" };
       }
       return { refused: "CUSTODY_CONTRACT_MISMATCH" };
     }
-    if (!args.custody) {
-      return { refused: "NO_CUSTODY_GRANT" };
-    }
-    const seal = await custodySealHex(args.custody);
-    if (args.custody.sha256 !== seal) {
+    const seal = await custodySealHex(custody);
+    if (custody.sha256 !== seal) {
       return { refused: "CUSTODY_SEAL_MISMATCH" };
     }
   }
