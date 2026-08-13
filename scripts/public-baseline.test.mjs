@@ -98,4 +98,11 @@ test("historical archive name is not a live tip dependency", () => {
   const live = execFileSync("git", ["ls-files", "--", "artifacts/family_g/test_nested_archive.py"], { encoding: "utf8" })
     .trim();
   assert.equal(live, "");
+  const report = execFileSync("git", ["show", ":artifacts/patent_family_g_dual_digest_20260813.md"], { encoding: "utf8" });
+  assert.match(report, /HISTORICAL — not live tip proof/);
+  assert.doesNotMatch(report, /Live nested archive .* PASS/);
+  const hist = JSON.parse(execFileSync("git", ["show", ":artifacts/family_g/nested_archive_result.json"], { encoding: "utf8" }));
+  assert.equal(hist.live_proof, false);
+  assert.equal(hist.live_on_tip, false);
+  assert.equal(hist.kind, "historical_observation");
 });

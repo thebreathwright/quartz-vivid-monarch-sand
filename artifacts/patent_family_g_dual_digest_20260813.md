@@ -7,7 +7,8 @@ legal: research/drafting only
 ## Reconciliation
 
 The 12/12 bench label is not archive evidence. It ran the in-app gate on a
-bound provenance object. The live nested-archive discriminator is separate.
+bound provenance object. The nested-archive run is a historical observation.
+The zip and its Python discriminator are absent from the current public tip.
 
 | Check | What it actually ran | Result |
 |---|---|---|
@@ -15,18 +16,17 @@ bound provenance object. The live nested-archive discriminator is separate.
 | `g-admit-seed` | `admitRegistry(CLAIM_RECORDS, CLAIM_PROVENANCE)` | PASS as a gate, not a zip hash |
 | `g-no-collapse` | mutated provenance object | PASS |
 | `g-no-wholesale` | allowWholesale / writeDatabase flags | PASS |
-| Live nested archive | `artifacts/family_g/test_nested_archive.py` against `UP2SPEED.zip` | PASS |
+| Nested archive (historical) | former `test_nested_archive.py` against `UP2SPEED.zip` | HISTORICAL — not live tip proof |
 
-Live test side effects: `temp_files=false`, `extractall=false`. Member bytes
-were read from the zip in memory.
+Current public proof is extract-only `admitRegistry` in `scripts/public-baseline.mts`.
 
-## Live nested-archive observation
+## Historical nested-archive observation
 
-- container `UP2SPEED.zip` `7b1e4af5a750682dbd4a8d4e82fffbc69ca8e983c83dbe0523db26320982e591`
+- container label `UP2SPEED.zip` `7b1e4af5a750682dbd4a8d4e82fffbc69ca8e983c83dbe0523db26320982e591`
 - member `03_claim_registry.seed.jsonl` `783eadf6a209e64ee2e9908f54692297a8bcbd08ee5e4a652e98dbe482256495`
 - 60 IDs RAC-CLM-001 → RAC-CLM-060
 - payload equal to `src/lib/canon/claims.json`
-- result file: `artifacts/family_g/nested_archive_result.json`
+- result file: `artifacts/family_g/nested_archive_result.json` (historical, not live)
 
 ## Selected edge (unchanged)
 
