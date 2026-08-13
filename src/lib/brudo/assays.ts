@@ -279,27 +279,33 @@ export async function runAssays(): Promise<AssayResult[]> {
       requestedConsequence: "ARCHIVE",
       issuedAt: "2026-08-12T19:00:00Z",
     };
-    const { requestConsequence } = await import("./admission");
+    const { custodySealHex, requestConsequence } = await import("./admission");
+    const seal = await custodySealHex({ resultDigest: digest, resultContractId: CONTRACT_K1.id });
     const bound = {
       capabilityId: "cap-exec",
       scope: "EXECUTE" as const,
       authorityId: "auth-1",
       resultDigest: digest,
       resultContractId: CONTRACT_K1.id,
-      sha256: "ab".repeat(32),
+      sha256: seal,
     };
-    const donated = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "NONE" });
-    const asserted = requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "EXECUTE" });
-    const custody = requestConsequence({ receipt: archived, wanted: "EXECUTE", custody: bound });
-    const wrongDigest = requestConsequence({
+    const donated = await requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "NONE" });
+    const asserted = await requestConsequence({ receipt: archived, wanted: "EXECUTE", assertedGrant: "EXECUTE" });
+    const custody = await requestConsequence({ receipt: archived, wanted: "EXECUTE", custody: bound });
+    const wrongDigest = await requestConsequence({
       receipt: archived,
       wanted: "EXECUTE",
       custody: { ...bound, resultDigest: "cd".repeat(32) },
     });
-    const wrongContract = requestConsequence({
+    const wrongContract = await requestConsequence({
       receipt: archived,
       wanted: "EXECUTE",
       custody: { ...bound, resultContractId: "other-contract" },
+    });
+    const arbitraryHex = await requestConsequence({
+      receipt: archived,
+      wanted: "EXECUTE",
+      custody: { ...bound, sha256: "ab".repeat(32) },
     });
     results.push({
       id: "z2-no-donate",
@@ -320,8 +326,10 @@ export async function runAssays(): Promise<AssayResult[]> {
         "refused" in wrongDigest &&
         wrongDigest.refused === "CUSTODY_DIGEST_MISMATCH" &&
         "refused" in wrongContract &&
-        wrongContract.refused === "CUSTODY_CONTRACT_MISMATCH",
-      detail: `bound=${"ok" in custody} digest=${"refused" in wrongDigest ? wrongDigest.refused : "ok"} contract=${"refused" in wrongContract ? wrongContract.refused : "ok"}`,
+        wrongContract.refused === "CUSTODY_CONTRACT_MISMATCH" &&
+        "refused" in arbitraryHex &&
+        arbitraryHex.refused === "CUSTODY_SEAL_MISMATCH",
+      detail: `bound=${"ok" in custody} digest=${"refused" in wrongDigest ? wrongDigest.refused : "ok"} contract=${"refused" in wrongContract ? wrongContract.refused : "ok"} seal=${"refused" in arbitraryHex ? arbitraryHex.refused : "ok"}`,
     });
   }
 
@@ -362,8 +370,12 @@ export async function runAssays(): Promise<AssayResult[]> {
       requestedConsequence: "CANDIDATE",
       issuedAt: "2026-08-12T19:00:00Z",
     };
-    const { requestConsequence } = await import("./admission");
-    const gated = requestConsequence({
+    const { custodySealHex, requestConsequence } = await import("./admission");
+    const seal = await custodySealHex({
+      resultDigest: receipt.resultDigest,
+      resultContractId: receipt.resultContractId,
+    });
+    const gated = await requestConsequence({
       receipt,
       wanted: "EXECUTE",
       custody: {
@@ -372,7 +384,7 @@ export async function runAssays(): Promise<AssayResult[]> {
         authorityId: "auth-1",
         resultDigest: receipt.resultDigest,
         resultContractId: receipt.resultContractId,
-        sha256: "ab".repeat(32),
+        sha256: seal,
       },
     });
     results.push({

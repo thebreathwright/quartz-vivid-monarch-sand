@@ -1,3 +1,5 @@
+import { sha256Hex } from "./hash";
+
 export type ExecutionState = "NOT_STARTED" | "EXECUTING" | "COMPLETED" | "FAILED";
 export type AdmissionState = "UNASSESSED" | "ADMITTED" | "REJECTED" | "WITHHELD";
 
@@ -144,6 +146,14 @@ export function isExecuteCustody(custody: GrantCustody | null | undefined): cust
   );
 }
 
+export function custodySealPayload(args: { resultDigest: string; resultContractId: string }): string {
+  return JSON.stringify({ resultDigest: args.resultDigest, resultContractId: args.resultContractId });
+}
+
+export async function custodySealHex(args: { resultDigest: string; resultContractId: string }): Promise<string> {
+  return sha256Hex(custodySealPayload(args));
+}
+
 export function custodyBindsReceipt(
   custody: GrantCustody | null | undefined,
   receipt: GenerativeReceipt,
@@ -155,12 +165,12 @@ export function custodyBindsReceipt(
   );
 }
 
-export function requestConsequence(args: {
+export async function requestConsequence(args: {
   receipt: GenerativeReceipt;
   wanted: "EXECUTE" | "ARCHIVE" | "CANDIDATE";
   assertedGrant?: "EXECUTE" | "ARCHIVE" | "NONE";
   custody?: GrantCustody | null;
-}): { ok: true } | { refused: string } {
+}): Promise<{ ok: true } | { refused: string }> {
   const shapeOk = isExecuteCustody(args.custody);
   const bound = custodyBindsReceipt(args.custody, args.receipt);
   if (args.wanted === "EXECUTE" || args.wanted === "CANDIDATE") {
@@ -178,6 +188,13 @@ export function requestConsequence(args: {
         return { refused: "CUSTODY_DIGEST_MISMATCH" };
       }
       return { refused: "CUSTODY_CONTRACT_MISMATCH" };
+    }
+    if (!args.custody) {
+      return { refused: "NO_CUSTODY_GRANT" };
+    }
+    const seal = await custodySealHex(args.custody);
+    if (args.custody.sha256 !== seal) {
+      return { refused: "CUSTODY_SEAL_MISMATCH" };
     }
   }
   if (args.receipt.admissionState !== "ADMITTED") {

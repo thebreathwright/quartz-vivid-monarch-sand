@@ -85,6 +85,8 @@ test("admission runtime refuses asserted grant without custody", () => {
   assert.match(src, /custodyBindsReceipt/);
   assert.match(src, /CUSTODY_DIGEST_MISMATCH/);
   assert.match(src, /CUSTODY_CONTRACT_MISMATCH/);
+  assert.match(src, /CUSTODY_SEAL_MISMATCH/);
+  assert.match(src, /custodySealPayload/);
   assert.match(src, /ARCHIVE_DOES_NOT_DONATE_EXECUTE/);
   assert.doesNotMatch(src, /from ["']@\/brudo\/policy/);
   assert.doesNotMatch(src, /runAblation/);
