@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { runFrozen } from "../src/brudo/implication-cases.ts";
 import { CLAIM_PROVENANCE, CLAIM_RECORDS, EXPECTED } from "../src/lib/canon/loader.ts";
 import { admitRegistry } from "../src/lib/canon/admit-registry.ts";
+import { publicStepViolations } from "../src/lib/train/modules.ts";
 
 function sha256(path: string) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
@@ -70,10 +71,16 @@ if (
   throw new Error(JSON.stringify({ admitted, collapsed, wrongBox, wholesale, db }));
 }
 
+const trainViolations = publicStepViolations();
+if (trainViolations.length) {
+  throw new Error(`public steps leaked: ${trainViolations.map((m) => m.id).join(",")}`);
+}
+
 console.log(JSON.stringify({
   ok: true,
   files: Object.keys(provenance.files),
   forbidden: forbidden.paths.length,
   freeze: freeze.count,
   registry: admitted.admissionState,
+  train: "FIREWALLED",
 }, null, 2));
