@@ -89,3 +89,18 @@ test("admission runtime refuses asserted grant without custody", () => {
   assert.doesNotMatch(src, /from ["']@\/brudo\/policy/);
   assert.doesNotMatch(src, /runAblation/);
 });
+
+test("forbidden raw bundles and traces are absent from the git tip", () => {
+  const { paths } = JSON.parse(readFileSync("src/brudo/forbidden-tip-paths.json", "utf8"));
+  assert.ok(paths.length > 0);
+  const tracked = execFileSync("git", ["ls-files", "--", ...paths], { encoding: "utf8" })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  assert.deepEqual(tracked, [], `still on tip: ${tracked.join(", ")}`);
+  const zips = execFileSync("git", ["ls-files", "*.zip"], { encoding: "utf8" })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  assert.deepEqual(zips, [], `zip still on tip: ${zips.join(", ")}`);
+});

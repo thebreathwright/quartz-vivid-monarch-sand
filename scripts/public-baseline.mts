@@ -24,4 +24,12 @@ if ((provenance.not_included as string[]).some((f: string) => {
   throw new Error("private paths must remain gitignored");
 }
 
-console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files) }, null, 2));
+const forbidden = JSON.parse(readFileSync("src/brudo/forbidden-tip-paths.json", "utf8"));
+const { execFileSync } = await import("node:child_process");
+const present = execFileSync("git", ["ls-files", "--", ...forbidden.paths], { encoding: "utf8" })
+  .trim()
+  .split("\n")
+  .filter(Boolean);
+if (present.length) throw new Error(`forbidden paths on tip: ${present.join(", ")}`);
+
+console.log(JSON.stringify({ ok: true, files: Object.keys(provenance.files), forbidden: forbidden.paths.length }, null, 2));

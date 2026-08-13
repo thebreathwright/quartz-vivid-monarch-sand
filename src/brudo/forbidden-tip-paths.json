@@ -1,0 +1,16 @@
+{
+  "reason": "Raw bundles and interface traces must stay off the public tip. Derived reports, extracts, and screenshots remain.",
+  "paths": [
+    "attachments/UP2SPEED.zip",
+    "attachments/_PKG_MKR_GLOBAL_.zip",
+    "attachments/hand_made_set_Bruce.zip",
+    "attachments/CODEBASE_TOME.zip",
+    "attachments/CODEBASE_INTRFACE_13.txt",
+    "attachments/CODEBASE_INTRFACE_32.txt",
+    "attachments/CODEBASE_INTRFACE_33.txt",
+    "attachments/CODEBASE_INTRFACE_34.txt",
+    "attachments/pasted-text.txt",
+    "artifacts/handmade_set/CODEBASE_INTRFACE_33.txt",
+    "artifacts/handmade_set/CODEBASE_INTRFACE_34.txt"
+  ]
+}
